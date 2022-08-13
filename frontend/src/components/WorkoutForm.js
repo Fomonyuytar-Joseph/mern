@@ -4,8 +4,42 @@ function WorkoutForm() {
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
+    const [error ,setError]=useState(null)
+
+    const handleSubmit= async (e) =>{
+        e.preventDefault();
+
+        const workout ={title ,load ,reps}
+
+        const response = await fetch('/api/workouts',{
+
+            method:'POST',
+            body:JSON.stringify(workout),
+            headers:{
+                'content-type':'application/json'
+            }
+            
+        })
+
+        const json = await response.json()
+
+        if(!response.ok){
+            setError(json.error)
+        }
+
+        if(response.ok){
+            
+            setTitle('')
+            setLoad('')
+            setReps('')
+            setError(null)
+
+            console.log('new workout added ',json)
+        }
+    }
+     
   return (
-    <form className='create' action=''>
+    <form className='create' onSubmit={handleSubmit}>
     <h3>Add a New Workout</h3>
 
     <label> Exercise Title:</label>
@@ -33,6 +67,7 @@ function WorkoutForm() {
        />
 
     <button>Add Workout</button>
+    {error && <div className='error'> {error}</div>}
 
 
     </form>
