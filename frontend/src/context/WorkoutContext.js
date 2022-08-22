@@ -2,6 +2,26 @@ import { createContext, useReducer } from "react";
 
 export const WorkoutsContext = createContext()
 
+export const workoutsReducer=(state , action)=>{
+
+    switch (action.type) {
+        case 'SET_WORKOUTS':
+            return{
+                workouts:action.apyload
+            }
+        case 'CREATE_WORKOUT':
+            return{
+                workouts:[action.payload,...state.workouts]
+            }
+           
+    
+        default:
+            return state
+    }
+
+
+}
+
 
 //proviode context to apllication tree and wrap the rest of our application
 
@@ -11,11 +31,11 @@ export const WorkoutsContextProvider= ({children})=>{
         workouts:null
     })
 
-    dispatch({type:"C"})
+   
 
     return(
         //value prop as state for the app
-        <WorkoutsContext.Provider value={{workouts:[]}}>
+        <WorkoutsContext.Provider value={{...state ,dispatch}}>
          
                  {children }
 
